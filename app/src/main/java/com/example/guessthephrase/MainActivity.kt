@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         counter = 10
         isPhrase = true
         answer = phrases[Random.nextInt(0, phrases.size)]
-        phraseTextView.setText("Phrase")
+        phraseTextView.setText("Phrase"+encodePhrase(answer))
         letterTextView.setText("")
         myRV.adapter!!.notifyDataSetChanged()
     }
@@ -173,6 +173,7 @@ class MainActivity : AppCompatActivity() {
                     counter = 10
                     isPhrase = false
                     guessList.clear()
+                    checkLetter(guessText[0])
 
                 }
             } else {
