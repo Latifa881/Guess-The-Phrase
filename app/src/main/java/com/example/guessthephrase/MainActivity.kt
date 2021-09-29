@@ -1,6 +1,7 @@
 package com.example.guessthephrase
 
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var myRV: RecyclerView
     lateinit var phraseTextView: TextView
     lateinit var letterTextView: TextView
+    lateinit var guessedET:EditText
     var guessList = arrayListOf<String>()
     var guessLetters = arrayListOf<String>()
     var phrases = arrayListOf<String>()
@@ -25,7 +27,10 @@ class MainActivity : AppCompatActivity() {
     var answer = ""
     var isPhrase = true
     var guessCorrectLetter = ""
-
+    // extension function to set edit text maximum length
+    fun EditText.setMaxLength(maxLength: Int){
+        filters = arrayOf<InputFilter>(InputFilter.LengthFilter(maxLength))
+    }
     fun customAlert(title: String, message: String) {
         val builder = AlertDialog.Builder(this)
         //set title for alert dialog
@@ -61,7 +66,16 @@ class MainActivity : AppCompatActivity() {
         } else {
             counter--
             guessList.add("$guessText is a wrong guess.")
-            guessList.add("$counter guesses remaining!")
+            if(counter!=0){
+            guessList.add("$counter guesses remaining!")}
+            else{
+                guessedET.hint = "Guess the letters of the phrase"
+                guessedET.setMaxLength(1)
+                counter = 10
+                isPhrase = false
+                guessList.clear()
+
+            }
 
         }
         myRV.adapter!!.notifyDataSetChanged()
@@ -94,6 +108,7 @@ class MainActivity : AppCompatActivity() {
     fun checkLetter(guessLetter: Char) {
 
         letterTextView.setVisibility(View.VISIBLE)
+        guessedET.setMaxLength(1)
 
         if (answer.contains(guessLetter)) {//the letter exist in the phrase
             guessLetters.add(guessLetter + "")
@@ -161,7 +176,11 @@ class MainActivity : AppCompatActivity() {
         phraseTextView.text = "Phrase: " + encodePhrase(answer)
 
         val GuessBT = findViewById<Button>(R.id.GuessBT)
-        var guessedET = findViewById<EditText>(R.id.editTextGuess)
+         guessedET = findViewById<EditText>(R.id.editTextGuess)
+
+
+      guessedET.setMaxLength(answer.length)
+
         GuessBT.setOnClickListener {
             var guessText = guessedET.text.toString()
             if (isPhrase) {
@@ -170,10 +189,11 @@ class MainActivity : AppCompatActivity() {
                         checkPhrase(guessText)
                     }
                 } else { //the user lost his 10 chances in guessing the full phrase
-                    counter = 10
-                    isPhrase = false
-                    guessList.clear()
-                    checkLetter(guessText[0])
+//                    counter = 10
+//                    isPhrase = false
+//                    guessList.clear()
+                    //guessedET.hint = "Guess the letters of the phrase"
+                    //checkLetter(guessText[0])
 
                 }
             } else {
@@ -187,7 +207,7 @@ class MainActivity : AppCompatActivity() {
                     replayGame()
                 }
             }
-
+            guessedET.text.clear()
         }
 
     }
