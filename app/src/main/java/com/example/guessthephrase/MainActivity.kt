@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         answer = phrases[Random.nextInt(0, phrases.size)]
         phraseTextView.setText("Phrase"+encodePhrase(answer))
         letterTextView.setText("")
+        guessedET.hint = "Guess the letters of the phrase"
         myRV.adapter!!.notifyDataSetChanged()
     }
 
@@ -188,13 +189,6 @@ class MainActivity : AppCompatActivity() {
                     if (!checkIfEmpty(guessText)) {
                         checkPhrase(guessText)
                     }
-                } else { //the user lost his 10 chances in guessing the full phrase
-//                    counter = 10
-//                    isPhrase = false
-//                    guessList.clear()
-                    //guessedET.hint = "Guess the letters of the phrase"
-                    //checkLetter(guessText[0])
-
                 }
             } else {
                 if (counter > 0) {
